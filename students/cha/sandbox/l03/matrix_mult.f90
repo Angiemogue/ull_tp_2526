@@ -1,4 +1,4 @@
-program matrix_mult_simple
+program matrix_mult
     implicit none
 
     ! Matrix dimensions
@@ -47,10 +47,4 @@ program matrix_mult_simple
         print '(4F6.1)', C(i,1:ma)
     end do
 
-end program matrix_mult_simple
-
-
-
-
-
-
+end program matrix_mult
