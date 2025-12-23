@@ -9,7 +9,9 @@ program ex2
     integer :: ierr ! This is to check and deallocate
     character(len=100) :: infile   ! Name of the input file
     character(len=200) :: in ! argument in the terminal for the input file
-
+    real(dp) :: t1, t2
+    ! Variables for system_clock (alternative to omp_get_wtime for serial running)
+    integer(kind=8) :: count_start, count_end, count_rate
 
     call get_command_argument(1,in)
 
@@ -47,6 +49,23 @@ program ex2
     !! Compute initial accelerations
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+    ! Here we start the time calculation
+
+    ! We initialize with -1.0 to know if OpenMP is active
+    t1 = -1.0_dp 
+    t2 = -1.0_dp
+
+    !$ t1 = omp_get_wtime() ! Only if we compile with -fopenmp
+    
+    ! If we do not use OpenMP:
+    if (t1 == -1.0_dp) then 
+        call system_clock(count_start, count_rate)
+        print *, "Running in serial mode (using system_clock)..."
+    else
+        print *, "Running in parallel mode (using OpenMP wtime)..."
+    end if
+
+
     do i = 1, n
       a(i) = vector3d(0.0_dp, 0.0_dp, 0.0_dp)
     end do
@@ -55,12 +74,23 @@ program ex2
 
     call main_loop(part, a, n, dt, dt_out, t_end)
 
+    !$t2 = omp_get_wtime()
+
     print *, "Simulation complete :) Particles positions save in output.dat"
+
+
+    ! If t1 changed, we used OpenMP
+    if (t1 /= -1.0_dp) then
+        print *, "Total execution time (OPMP): ", t2 - t1, " s"
+    else
+        call system_clock(count_end)
+        print *, "Total execution time (serial): ", &
+             real(count_end - count_start, dp) / real(count_rate, dp), " s"
+    end if
 
     ! Finally we check the status of the arrays and deallocate
     if (allocated(part)) deallocate(part, stat=ierr)
     if (allocated(a)) deallocate(a, stat=ierr)
-    
     
     contains
 

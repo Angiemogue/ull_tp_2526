@@ -9,7 +9,7 @@ program ex2_mpi
     integer :: ierr ! This is to check and deallocate
     character(len=100) :: infile   ! Name of the input file
     character(len=200) :: in ! argument in the terminal for the input file
-
+    real(dp) :: t1, t2
 
     call get_command_argument(1,in)
 
@@ -57,6 +57,10 @@ program ex2_mpi
      !! Compute initial accelerations
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+    ! Here we start the time calculation
+
+    t1 = MPI_WTIME()
+
     do i = 1, n
       a(i) = vector3d(0.0_dp, 0.0_dp, 0.0_dp)
     end do
@@ -73,13 +77,20 @@ program ex2_mpi
         ! In order to print only once in the terminal
         print *, "Simulation complete :) Particles positions save in output.dat"
     end if
+
+        
+    t2 = MPI_WTIME()
+
+    if (my_rank == 0) then
+        print *, "Total execution time (s): ", t2 - t1
+    end if
+
     
     ! Finally we check the status of the arrays and deallocate
     if (allocated(part)) deallocate(part, stat=ierr)
     if (allocated(a)) deallocate(a, stat=ierr)
     if (allocated(total_a)) deallocate(total_a, stat=ierr)
-    
-    
+
     contains
 
     subroutine read_input(infile, in,  n, dt, dt_out, t_end, part, a)

@@ -317,8 +317,6 @@ contains
             goal%part%m = part(goal%pos)%m
             goal%c_o_m = part(goal%pos)%p
         case (2)
-            !$omp parallel
-            !$omp do collapse(3) private(i,j,k)
             do i = 1,2
                 do j = 1,2
                     do k = 1,2
@@ -332,8 +330,6 @@ contains
                     end do
                 end do
             end do
-            !$omp end do
-            !$omp end parallel
         end select
     end subroutine calculate_masses
 
@@ -395,8 +391,6 @@ contains
                 r3 = rs**3
                 a(goal) = a(goal) + tree%part%m * rji / r3
             else
-                !$omp parallel
-                !$omp do collapse(3) private(i,j,k)
                 do i = 1,2
                     do j = 1,2
                         do k = 1,2
@@ -406,8 +400,6 @@ contains
                         end do
                     end do
                 end do
-                !$omp end do
-                !$omp end parallel
             end if
         end select
     end subroutine calculate_forces_aux

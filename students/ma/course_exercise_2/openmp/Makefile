@@ -4,7 +4,7 @@ NAME = ex2
 
 # Configuration settings
 FC = gfortran
-FCFLAGS = -c
+FCFLAGS = -c -O3 -cpp
 
 # To use OpenMP we can write USE_OMP=1. Or in terminal: make USE_OMP=1
 USE_OMP ?= 0
@@ -35,7 +35,7 @@ generator: geometry.o N_body_generator.o
 	$(FC) $(FCFLAGS) $<
 	# With this take all the .o and compile it first
 clean:
-		rm -f *.o *.mod ex2 generator input.dat output.dat
+		rm -f *.o *.mod ex2 generator input.dat output.dat particles.gif
 
 # Run the executable
 gen:
