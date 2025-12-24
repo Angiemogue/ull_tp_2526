@@ -8,11 +8,10 @@ module tree
     implicit none
 
     integer :: i,j,k,n
-    real(dp) :: dt, t_end, t, dt_out, t_out, rs, r3
+    real(dp) :: dt, t_end, t, dt_out, t_out
     real(dp), parameter :: theta = 1
     type(particle3d), dimension(:), allocatable :: part
     type(vector3d), dimension(:), allocatable :: a
-    type(vector3d) :: rji
     
     type range ! limits of a cell
         real(dp), dimension(3) :: min,max
@@ -370,7 +369,8 @@ contains
     recursive subroutine calculate_forces_aux(goal,tree)
         type(cell),pointer :: tree
         integer :: i,j,k,goal
-        real(dp) :: l
+        real(dp) :: l, rs, r3
+        type(vector3d) :: rji
         select case (tree%type)
         case (1)
             if (goal .ne. tree%pos) then
@@ -430,7 +430,11 @@ contains
         t_out = 0.0
         do t = 0.0, t_end, dt
             
-            print *, "t = ", t, "dt = ", dt 
+           ! With the following we print the time every 1.0 time units
+            if (mod(t, 1.0_dp) < dt) then
+                 print *, "t = ", t
+            end if
+
             !$omp parallel do private(i)
             do i= 1, n
                 part(i)%v = part(i)%v + a(i) * dt/2.0_dp

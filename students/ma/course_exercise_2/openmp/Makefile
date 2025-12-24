@@ -35,7 +35,7 @@ generator: geometry.o N_body_generator.o
 	$(FC) $(FCFLAGS) $<
 	# With this take all the .o and compile it first
 clean:
-		rm -f *.o *.mod ex2 generator input.dat output.dat particles.gif
+		rm -f *.o *.mod ex2 generator output.dat input.dat
 
 # Run the executable
 gen:

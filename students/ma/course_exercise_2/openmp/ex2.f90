@@ -74,12 +74,11 @@ program ex2
 
     call main_loop(part, a, n, dt, dt_out, t_end)
 
-    !$t2 = omp_get_wtime()
+    !$ t2 = omp_get_wtime()
 
     print *, "Simulation complete :) Particles positions save in output.dat"
 
-
-    ! If t1 changed, we used OpenMP
+    ! If t1 changed, we used OpenMP 
     if (t1 /= -1.0_dp) then
         print *, "Total execution time (OPMP): ", t2 - t1, " s"
     else

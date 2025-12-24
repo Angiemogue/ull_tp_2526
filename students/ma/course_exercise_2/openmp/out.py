@@ -32,15 +32,15 @@ fig, ax = plt.subplots()
 lines = [ax.plot([], [], '-', color='grey', alpha=0.3)[0] for _ in range(n_particles)]
 points = [ax.plot([], [], 'o')[0] for _ in range(n_particles)]
 
-# It could be easily done in a 3D plot, but here in our input.dat file our z position is all 0  
 
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 
 # axis limits
-
-ax.set_xlim(-3,3)
-ax.set_ylim(-3,3)
+a_x = np.concatenate([p[0] for p in positions])
+a_y = np.concatenate([p[1] for p in positions])
+ax.set_xlim(a_x.min() - 1, a_x.max() + 1)
+ax.set_ylim(a_y.min() - 1, a_y.max() + 1)
 
 def animate(i):
 

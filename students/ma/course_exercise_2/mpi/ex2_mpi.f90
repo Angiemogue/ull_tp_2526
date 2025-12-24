@@ -11,6 +11,12 @@ program ex2_mpi
     character(len=200) :: in ! argument in the terminal for the input file
     real(dp) :: t1, t2
 
+    !! MPI initialization
+    !!!!!!!!!!!!!!!!!!!!!!!!
+    call MPI_INIT ( error )
+    call MPI_COMM_SIZE ( MPI_COMM_WORLD, p, error )
+    call MPI_COMM_RANK ( MPI_COMM_WORLD, my_rank, error )
+
     call get_command_argument(1,in)
 
     if (len_trim(in)==0) then ! If input is not given 
@@ -19,8 +25,10 @@ program ex2_mpi
     endif
 
     infile = trim(in) ! remove empty space
-    print *, "Reading input file: ", trim(infile)
 
+    if (my_rank == 0) then 
+        print *, "Reading input file: ", trim(infile)
+    end if
 
     ! We use the subroutine to read the file, and initialize MPI
     call read_input(infile,in, n,dt,dt_out,t_end,part,a)
@@ -104,16 +112,13 @@ program ex2_mpi
 
     
         open(unit=10, file=infile, status='old', action='read', iostat=ierr)
-        if (ierr /= 0) then 
-            print *, "Error: The file doesn't exist or it cannot be open: ", trim(infile)
-        stop
+        if (my_rank == 0) then
+            if (ierr /= 0) then 
+                print *, "Error: The file doesn't exist or it cannot be open: ", trim(infile)
+            stop
+            endif
         endif
 
-        !! MPI initialization
-        !!!!!!!!!!!!!!!!!!!!!!!!
-        call MPI_INIT ( error )
-        call MPI_COMM_SIZE ( MPI_COMM_WORLD, p, error )
-        call MPI_COMM_RANK ( MPI_COMM_WORLD, my_rank, error )
     
         !! Matrix initialization
         !! The master reads from file and broadcasts

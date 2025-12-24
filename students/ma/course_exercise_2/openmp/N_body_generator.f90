@@ -8,7 +8,7 @@ program N_body_generator
   real(dp) :: mass, rx, ry, rz
   real(dp) :: dt = 0.001
   real(dp) :: dt_im = 0.1
-  real(dp) :: t = 100.0 
+  real(dp) :: t = 10.0 
 
   call date_and_time(values=values)
   call random_seed(size=k)

@@ -30,11 +30,10 @@ module tree_mpi
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     integer :: i,j,k,n
-    real(dp) :: dt, t_end, t, dt_out, t_out, rs, r3
+    real(dp) :: dt, t_end, t, dt_out, t_out
     real(dp), parameter :: theta = 1
     type(particle3d), dimension(:), allocatable :: part
     type(vector3d), dimension(:), allocatable :: a, total_a
-    type(vector3d) :: rji
 
     
 
@@ -396,7 +395,8 @@ contains
     recursive subroutine Calculate_forces_aux(number, tree)
         type(CELL), pointer :: tree
         integer :: i, j, k, number
-        real(dp) :: l
+        real(dp) :: l, rs, r3
+        type(vector3d) :: rji
         
         select case (tree%type)
         case (1)
@@ -445,18 +445,24 @@ contains
 
         ! If we change the number of particles the code could be slower, therefore it is convenient to write messages in order to clarify that all is 
         ! running smoothly
-
-        print *, "Starting the simulation..."
-        print *, "Number of particles:", n
-        print *, "Total time:", t_end, "Timestep:", dt
-        print *, "---------------------------------------------"
+        if (my_rank == 0) then
+            print *, "Starting the simulation..."
+            print *, "Number of particles:", n
+            print *, "Total time:", t_end, "Timestep:", dt
+            print *, "---------------------------------------------"
+        end if
 
         do t = 0.0, t_end, dt
             
-            print *, "t = ", t, "dt = ", dt 
+            if (my_rank == 0) then
+            ! With the following we print the time every 1.0 time units
+                if (mod(t, 1.0_dp) < dt) then
+                    print *, "t = ", t
+                end if
+            end if
     
             do i= 1, n
-                part(i)%v = part(i)%v + a(i) * dt/2.0_dp
+                part(i)%v = part(i)%v + total_a(i) * dt/2.0_dp
                 part(i)%p = part(i)%p + part(i)%v * dt
             end do 
     
