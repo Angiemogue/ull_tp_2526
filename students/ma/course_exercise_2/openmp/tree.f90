@@ -344,7 +344,9 @@ contains
     subroutine calculate_forces(head)
         type(cell),pointer :: head
         integer :: i,j,k,start,end
-        !$omp parallel do private(i)
+        !schedule(dynamic, 10) assigns particles in small chunks to threads as they become available, keeping 
+        !all cores busy and preventing to wait for others threads.
+        !$omp parallel do private(i) schedule(dynamic, 10) 
         do i = 1,n
             call calculate_forces_aux(i,head)
         end do
