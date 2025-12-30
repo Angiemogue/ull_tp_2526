@@ -102,28 +102,28 @@ It will appear in the same folder when the program ends. Besides, when the simul
 
 In my computer, with 300 particles and t_end = 10s (it depends of the specifications of each computer and the set of particles) it last: <br>
 
-Serial :  7.36 s <br>
-OPMP : 9.34 s   <br>
-MPI : 3.37 s  (with 4 procesors) <br>
+* Serial :  7.36 s <br>
+* OPMP : 9.34 s   <br>
+* MPI : 3.37 s  (with 4 procesors) <br>
 
 For 1000 particles and t_end = 10s <br>
 
-Serial : 44.03s   <br>
-OPMP :  22.94 s  <br>
-MPI :   13.90 s  (with 4 procesors) <br>
+* Serial : 44.03s   <br>
+* OPMP :  22.94 s  <br>
+* MPI :   13.90 s  (with 4 procesors) <br>
 
 For 3000 particles and t_end = 10s <br>
 
-Serial : 196.58 s  <br>
-OPMP :  50.72 s <br>
-MPI :  21.08 s (with 4 procesors) <br>
+* Serial : 196.58 s  <br>
+* OPMP :  50.72 s <br>
+* MPI :  21.08 s (with 4 procesors) <br>
 
 
 For 10000 particles and t_end = 10s <br>
 
-Serial : 872.08 s aprox 15 min  <br>
-OPMP :  170.36 s aprox 3 min <br>
-MPI :  276.71 s aprox 5 min (with 4 procesors) <br>
+* Serial : 872.08 s aprox 15 min  <br>
+* OPMP :  170.36 s aprox 3 min <br>
+* MPI :  276.71 s aprox 5 min (with 4 procesors) <br>
 
 
 **Conclusion:**
