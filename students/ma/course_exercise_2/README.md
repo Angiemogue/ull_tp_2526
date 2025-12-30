@@ -1,9 +1,42 @@
-Angeles Moreno Guedes -- ma/course_exercise_2
+# Barnes–Hut N-body Simulation  
+**Angeles Moreno Guedes** — `ma/course_exercise_2`
 
+This project implements a **Barnes–Hut algorithm** for an N-body gravitational simulation in Fortran.  
+Two parallelization approaches are provided:
 
-This is a Barnes-Hut algorithm to do a N body simulation. There are two folders: one it is parallelise with openmp and the other with MPI. It can be run in serial executing the code of the openmp folder or in mpi writing only one processor. <br>
+- **OpenMP** (shared memory)
+- **MPI** (distributed memory)
 
-In each folder we have 7 files: the ex2.f90 is the main program where we use all the modules and we read the input file. The geometry module that includes several functions to compute vector and points operations. The particles module, that defines a derived type to describe the principal characteristics of a particle to compute its movement. The tree module that contains the Barnes-Hut algorithm. The N_body_generator program, is a generator of the random position of the particles (the code is the same of the notes). Finally, the folders has an out.py that you can run to make an animation from the data given by output.dat. <br>
+Both versions can also be run in **serial mode**.
+
+---
+
+## Structure
+
+The repository contains two main folders:
+
+- `openmp/` — OpenMP-parallelized version 
+- `mpi/` — MPI-parallelized version
+
+Each folder contains **7 files**:
+
+- `ex2.f90`  
+  Main program. Reads the input file and calls all modules.
+- `geometry.f90`  
+  Vector and point operations.
+- `particles.f90`  
+  Defines a derived type describing particle properties and dynamics.
+- `tree.f90`  
+  Barnes–Hut tree construction and force calculation.
+- `N_body_generator.f90`  
+  Generates random initial conditions (same code as in the notes).
+- `Makefile`  
+- `out.py`  
+   To generate an animation from `output.dat`.
+
+---
+
+## Compilation
 
 
 In order to use the code, is important to first compile it with the makefile, using make in the directory where the code is: <br>
@@ -34,10 +67,13 @@ And in the mpi folder you can select the number of processors in the make file o
 
 It is easy to run in serial by choosing `-np 1` <br>
 
-If you want to erased the input.dat, output.dat and the executables with (recommended): <br>
+If you want to erased the input.dat, output.dat and the executables (recommended): <br>
 
 `make clean` <br>
 
+---
+
+## Input.dat
 
 The input.dat with the initial conditions has the following shape: <br>
 
@@ -50,12 +86,20 @@ m1 x1 y1 z1 vx1 vy1 vz1 (mass, initial position, initial velocity of particle1)<
 .<br>
 mn xn yn zn vxn vyn vzn        (mass, initial position, initial velocity of particlen)<br> 
 
+---
+
+## Output.dat
 
 Finally, the output will be an output.dat with the following shape: <br>
 
 time    p1x     p1y     p1z     ....    pnx     pny     pnz<br>
 
 It will appear in the same folder when the program ends. Besides, when the simulation ends in the terminal it is printed the total time it last <br>
+
+---
+
+## Performance
+
 In my computer, with 300 particles and t_end = 10s (it depends of the specifications of each computer and the set of particles) it last: <br>
 
 Serial :  7.36 s <br>
