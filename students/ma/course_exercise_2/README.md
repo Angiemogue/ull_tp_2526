@@ -58,42 +58,29 @@ time    p1x     p1y     p1z     ....    pnx     pny     pnz<br>
 It will appear in the same folder when the program ends. Besides, when the simulation ends in the terminal it is printed the total time it last <br>
 In my computer, with 300 particles and t_end = 10s (it depends of the specifications of each computer and the set of particles) it last: <br>
 
-Serial :  7.15 s <br>
-OPMP : 3.55 s   <br>
-MPI : 8.03 s  (with 4 procesors) <br>
+Serial :  7.36 s <br>
+OPMP : 9.34 s   <br>
+MPI : 3.37 s  (with 4 procesors) <br>
 
 For 1000 particles and t_end = 10s <br>
 
-Serial : 40s   <br>
-OPMP :  19s  <br>
-MPI :   41.4 s  (with 4 procesors) <br>
+Serial : 44.03s   <br>
+OPMP :  22.94 s  <br>
+MPI :   13.90 s  (with 4 procesors) <br>
 
 For 3000 particles and t_end = 10s <br>
 
-Serial : 181.30 s  <br>
-OPMP :  45.04 <br>
-MPI :  201 s approx 3.35 min (with 4 procesors) <br>
+Serial : 196.58 s  <br>
+OPMP :  50.72 s <br>
+MPI :  21.08 s (with 4 procesors) <br>
 
 
 For 10000 particles and t_end = 10s <br>
 
-Serial : 877.3 s aprox 15 min  <br>
-OPMP :  185.42 s aprox 3 min <br>
-MPI :  926.81 s aprox 15.44 min (with 4 procesors) <br>
-
-
-### Performance Analysis: Why is MPI slower?
-
-As observed in the results, **OpenMP** offers the best performance, scaling well with the number of particles. However, the **MPI** version is consistently slower than the OpenMP version and slower than the serial version. This could happen by these reasons:
-
-1.  **The MPI_ALLREDUCE of the notes parallelize evrything not only the calculation of the forces:**
-    The time spent packaging data, sending it, and synchronizing the processes (communication latency) exceeds the time saved by dividing the calculation work.
-
-2.  **Shared Memory vs. Distributed Memory:**
-    These tests were run on a single computer.
-    * **OpenMP** uses *Shared Memory*: Threads access the data (positions/masses) directly without copying it. This is very efficient on a single computer.
-    * **MPI** uses *Distributed Memory*: Even on a single computer, MPI simulates a network. It has to copy data from one process's memory space to another.
+Serial : 872.08 s aprox 15 min  <br>
+OPMP :  170.36 s aprox 3 min <br>
+MPI :  276.71 s aprox 5 min (with 4 procesors) <br>
 
 
 **Conclusion:**
-OpenMP is the optimal choice for this simulation on a single workstation. MPI would only start to show advantages if the number of particles were massive or if the simulation were distributed across a cluster.
+As observed in the results, **MPI** (Distributed Memory) offers the best performance (in general), followed by **OpenMP** (Shared Memory) that scales well with the number of particles. In the small dataset (N=300) **OpenMP** is the slower one due to the small number of particles. However, in the largest dataset (N=10000) is the becomes the fastest because it benefits of the shared memory against the distribuited one with **MPI**. The **MPI** is harder to program but offers more options to parallelize and performance. And it could offer even better performance in a cluster of computers. However, OpenMP can be a great option in a single computer since its performance is not so bad in comparation with the serial running and in this case benefits with the single workstation comparation
