@@ -1,8 +1,9 @@
 program ex2
 
-    use geometry
+use geometry
     use particles
     use tree
+    !$ use omp_lib
 
     implicit none
 
